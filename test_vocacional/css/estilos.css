@@ -1,0 +1,145 @@
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background: #171923;
+    color: #f4f4f5;
+    padding: 30px 16px;
+}
+
+.contenedor {
+    width: 100%;
+    max-width: 750px;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+header h1 {
+    color: #a5b4fc;
+}
+
+.panel {
+    background: #252938;
+    border: 1px solid #41475c;
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 20px;
+}
+
+button {
+    background: #818cf8;
+    color: #171923;
+    border: none;
+    border-radius: 7px;
+    padding: 12px 18px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    filter: brightness(1.1);
+}
+
+button:focus-visible,
+input:focus-visible + label {
+    outline: 3px solid #facc15;
+    outline-offset: 3px;
+}
+
+button.secundario {
+    background: #41475c;
+    color: white;
+}
+
+.progreso {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+progress {
+    width: 100%;
+    height: 12px;
+    accent-color: #a5b4fc;
+}
+
+#opciones {
+    display: grid;
+    gap: 12px;
+    margin: 24px 0;
+}
+
+.opcion {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px;
+    background: #30364a;
+    border: 1px solid #505873;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.opcion:has(input:checked) {
+    border-color: #a5b4fc;
+    background: #383f5c;
+}
+
+.opcion input {
+    accent-color: #a5b4fc;
+}
+
+.navegacion {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.texto-secundario {
+    color: #b9bfd1;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.resultado {
+    padding: 18px;
+    margin: 16px 0;
+    border: 1px solid #505873;
+    border-radius: 8px;
+    background: #30364a;
+}
+
+.resultado h3 {
+    margin-top: 0;
+    color: #c7d2fe;
+}
+
+.resultado progress {
+    display: block;
+    margin-top: 12px;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+@media (max-width: 480px) {
+    .panel {
+        padding: 20px;
+    }
+
+    .navegacion button {
+        padding: 11px;
+    }
+}

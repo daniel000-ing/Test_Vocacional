@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Vocacional UTP</title>
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+    <main class="contenedor">
+        <header>
+            <h1>Test Vocacional UTP</h1>
+            <p>Descubre áreas profesionales que conectan contigo.</p>
+        </header>
+
+        <section id="inicio" class="panel">
+            <h2>¿Preparado para comenzar?</h2>
+            <p>
+                Responde las preguntas según tus intereses,
+                habilidades y objetivos.
+            </p>
+            <button id="btnIniciar">Comenzar test</button>
+        </section>
+
+        <section id="cuestionario" class="panel" hidden>
+            <div class="progreso">
+                <span id="contadorPregunta"></span>
+                <progress id="barraProgreso" value="0" max="100"></progress>
+            </div>
+
+            <h2 id="tituloPregunta"></h2>
+            <p id="tipoPregunta" class="texto-secundario"></p>
+
+            <div id="opciones"></div>
+
+            <div class="navegacion">
+                <button id="btnAnterior" class="secundario">
+                    Anterior
+                </button>
+                <button id="btnSiguiente">Siguiente</button>
+            </div>
+        </section>
+
+        <section id="resultados" class="panel" hidden>
+            <h2>¡Tu aventura continúa!</h2>
+            <p>
+                Estas son las tres carreras que obtuvieron mayor
+                afinidad con tus respuestas.
+            </p>
+
+            <div id="listaResultados"></div>
+
+            <button id="btnReiniciar">Volver a comenzar</button>
+            <p class="texto-secundario">
+                Los resultados son orientativos y no sustituyen
+                una orientación vocacional profesional.
+            </p>
+        </section>
+    </main>
+
+    <script src="datos/programas.js"></script>
+    <script src="js/preguntas.js"></script>
+    <script src="js/calculo.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
