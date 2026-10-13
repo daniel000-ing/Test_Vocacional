@@ -1,46 +1,67 @@
 
-window.calcularResultados = function (respuestas) {
-    const dimensiones = [
-        { id: "intereses", peso: 0.40 },
-        { id: "habilidades", peso: 0.40 },
-        { id: "objetivos", peso: 0.20 }
-    ];
+function normalizar(texto) {
+  return String(texto ?? "")
+    .trim()
+    .toLocaleLowerCase("es");
+}
 
-    const preguntas = window.PREGUNTAS;
+function coincide(respuesta, opciones) {
+  const valor = normalizar(respuesta);
+  return valor !== "" &&
+    opciones.some(opcion => normalizar(opcion) === valor);
+}
 
-    return window.PROGRAMAS.map(programa => {
-        let afinidadTotal = 0;
+function calcularResultados(respuestas) {
+  const area = respuestas.area ?? "";
+  const fortalezas = respuestas.fortalezas ?? [
+    respuestas.fortaleza1,
+    respuestas.fortaleza2
+  ].filter(Boolean);
+  const objetivo = respuestas.objetivo ?? "";
 
-        dimensiones.forEach(dimension => {
-            const preguntasDimension = preguntas.filter(
-                pregunta => pregunta.dimension === dimension.id
-            );
+  const resultados = window.programas.map(programa => {
+    let puntos = 0;
+    const coincidencias = [];
 
-            const respondidas = preguntasDimension.filter(
-                pregunta => respuestas[pregunta.id]
-            );
+    if (coincide(area, programa.areas)) {
+      puntos += 3;
+      coincidencias.push("Área de interés");
+    }
 
-            if (respondidas.length === 0) {
-                return;
-            }
+    const fortalezasCoincidentes = new Set(
+      fortalezas
+        .filter(Boolean)
+        .filter(fortaleza =>
+          coincide(fortaleza, programa.fortalezas)
+        )
+        .map(normalizar)
+    );
 
-            const areasPrograma = programa[dimension.id];
+    puntos += fortalezasCoincidentes.size * 2;
 
-            const coincidencias = respondidas.filter(pregunta => {
-                return areasPrograma.includes(
-                    respuestas[pregunta.id]
-                );
-            }).length;
+    if (fortalezasCoincidentes.size > 0) {
+      coincidencias.push(
+        `${fortalezasCoincidentes.size} fortaleza(s)`
+      );
+    }
 
-            const afinidadDimension =
-                (coincidencias / respondidas.length) * 100;
+    if (coincide(objetivo, programa.objetivos)) {
+      puntos += 3;
+      coincidencias.push("Objetivo profesional");
+    }
 
-            afinidadTotal += afinidadDimension * dimension.peso;
-        });
+    return {
+      ...programa,
+      puntos,
+      afinidad: puntos * 10,
+      coincidencias
+    };
+  });
 
-        return {
-            ...programa,
-            afinidad: Math.round(afinidadTotal)
-        };
-    }).sort((a, b) => b.afinidad - a.afinidad);
-};
+  return resultados
+    .sort((a, b) =>
+      b.puntos - a.puntos ||
+      a.nombre.localeCompare(b.nombre, "es")
+    )
+    .slice(0, 3);
+}

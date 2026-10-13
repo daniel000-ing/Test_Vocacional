@@ -1,14 +1,15 @@
 
 const inicio = document.getElementById("inicio");
-const cuestionario = document.getElementById("cuestionario");
+const test = document.getElementById("test");
 const resultados = document.getElementById("resultados");
 
 const tituloPregunta = document.getElementById("tituloPregunta");
-const tipoPregunta = document.getElementById("tipoPregunta");
+const descripcionPregunta = document.getElementById("descripcionPregunta");
 const opciones = document.getElementById("opciones");
-
-const contadorPregunta = document.getElementById("contadorPregunta");
+const numeroPregunta = document.getElementById("numeroPregunta");
+const porcentaje = document.getElementById("porcentaje");
 const barraProgreso = document.getElementById("barraProgreso");
+const mensajeError = document.getElementById("mensajeError");
 
 const btnIniciar = document.getElementById("btnIniciar");
 const btnAnterior = document.getElementById("btnAnterior");
@@ -18,101 +19,85 @@ const btnReiniciar = document.getElementById("btnReiniciar");
 let indiceActual = 0;
 let respuestas = {};
 
-const nombresDimensiones = {
-    intereses: "Intereses",
-    habilidades: "Habilidades",
-    objetivos: "Objetivos"
-};
+btnIniciar.addEventListener("click", () => {
+    inicio.classList.add("oculto");
+    resultados.classList.add("oculto");
+    test.classList.remove("oculto");
+
+    indiceActual = 0;
+    respuestas = {};
+
+    mostrarPregunta();
+});
 
 function mostrarPregunta() {
-    const pregunta = window.PREGUNTAS[indiceActual];
+    const pregunta = preguntas[indiceActual];
+    const numero = indiceActual + 1;
+    const avance = Math.round(
+        (numero / preguntas.length) * 100
+    );
 
-    contadorPregunta.textContent =
-        `Pregunta ${indiceActual + 1} de ${window.PREGUNTAS.length}`;
+    numeroPregunta.textContent =
+        `Pregunta ${numero} de ${preguntas.length}`;
 
-    barraProgreso.value =
-        ((indiceActual + 1) / window.PREGUNTAS.length) * 100;
+    porcentaje.textContent = `${avance}%`;
+    barraProgreso.style.width = `${avance}%`;
 
-    tituloPregunta.textContent = pregunta.texto;
-    tipoPregunta.textContent =
-        `Dimensión: ${nombresDimensiones[pregunta.dimension]}`;
+    tituloPregunta.textContent = pregunta.titulo;
+    descripcionPregunta.textContent = pregunta.descripcion;
 
-    opciones.replaceChildren();
+    opciones.innerHTML = "";
 
-    pregunta.opciones.forEach((opcion, indice) => {
+    pregunta.opciones.forEach((opcion) => {
         const etiqueta = document.createElement("label");
         etiqueta.className = "opcion";
 
         const radio = document.createElement("input");
         radio.type = "radio";
-        radio.name = `pregunta-${pregunta.id}`;
-        radio.value = opcion.area;
-        radio.checked = respuestas[pregunta.id] === opcion.area;
-
-        const texto = document.createElement("span");
-        texto.textContent = opcion.texto;
-
-        etiqueta.append(radio, texto);
-        opciones.appendChild(etiqueta);
+        radio.name = pregunta.id;
+        radio.value = opcion;
+        radio.checked = respuestas[pregunta.id] === opcion;
 
         radio.addEventListener("change", () => {
-            respuestas[pregunta.id] = opcion.area;
+            respuestas[pregunta.id] = opcion;
+            mensajeError.classList.add("oculto");
         });
+
+        const texto = document.createElement("span");
+        texto.textContent = opcion;
+
+        etiqueta.appendChild(radio);
+        etiqueta.appendChild(texto);
+        opciones.appendChild(etiqueta);
     });
 
-    btnAnterior.disabled = indiceActual === 0;
+    btnAnterior.classList.toggle(
+        "oculto",
+        indiceActual === 0
+    );
 
     btnSiguiente.textContent =
-        indiceActual === window.PREGUNTAS.length - 1
+        indiceActual === preguntas.length - 1
             ? "Ver resultados"
             : "Siguiente";
+
+    mensajeError.classList.add("oculto");
 }
 
-function mostrarResultados() {
-    cuestionario.hidden = true;
-    resultados.hidden = false;
+btnSiguiente.addEventListener("click", () => {
+    const pregunta = preguntas[indiceActual];
 
-    const mejores = window.calcularResultados(respuestas).slice(0, 3);
-    const lista = document.getElementById("listaResultados");
+    if (!respuestas[pregunta.id]) {
+        mensajeError.classList.remove("oculto");
+        return;
+    }
 
-    lista.replaceChildren();
-
-    mejores.forEach((programa, indice) => {
-        const tarjeta = document.createElement("article");
-        tarjeta.className = "resultado";
-
-        const titulo = document.createElement("h3");
-        titulo.textContent = `${indice + 1}. ${programa.nombre}`;
-
-        const descripcion = document.createElement("p");
-        descripcion.textContent = programa.descripcion;
-
-        const afinidad = document.createElement("p");
-        afinidad.textContent =
-            `Afinidad estimada: ${programa.afinidad}%`;
-
-        const barra = document.createElement("progress");
-        barra.max = 100;
-        barra.value = programa.afinidad;
-        barra.setAttribute(
-            "aria-label",
-            `Afinidad estimada de ${programa.afinidad}%`
-        );
-
-        tarjeta.append(titulo, descripcion, afinidad, barra);
-        lista.appendChild(tarjeta);
-    });
-}
-
-btnIniciar.addEventListener("click", () => {
-    indiceActual = 0;
-    respuestas = {};
-
-    inicio.hidden = true;
-    resultados.hidden = true;
-    cuestionario.hidden = false;
-
-    mostrarPregunta();
+    if (indiceActual < preguntas.length - 1) {
+        indiceActual++;
+        mostrarPregunta();
+    } else {
+        mostrarResultados();
+    }
 });
 
 btnAnterior.addEventListener("click", () => {
@@ -122,27 +107,98 @@ btnAnterior.addEventListener("click", () => {
     }
 });
 
-btnSiguiente.addEventListener("click", () => {
-    const pregunta = window.PREGUNTAS[indiceActual];
+function mostrarResultados() {
+    test.classList.add("oculto");
+    resultados.classList.remove("oculto");
 
-    if (!respuestas[pregunta.id]) {
-        alert("Selecciona una opción para continuar.");
+    const listaResultados =
+        document.getElementById("listaResultados");
+
+    const mensajeResultado =
+        document.getElementById("mensajeResultado");
+
+    // Adaptamos las respuestas de las cuatro preguntas
+    // al formato que espera calculo.js.
+    const respuestasParaCalculo = {
+        area: respuestas.area,
+        fortalezas: [
+            respuestas.fortaleza1,
+            respuestas.fortaleza2
+        ].filter(Boolean),
+        objetivo: respuestas.objetivo
+    };
+
+    const recomendados =
+        calcularResultados(respuestasParaCalculo);
+
+    mensajeResultado.textContent =
+        "Estas son las coincidencias preliminares de tus respuestas. " +
+        "Explora cada programa y revisa si se ajusta a tus intereses.";
+
+    listaResultados.innerHTML = "";
+
+    if (
+        recomendados.length === 0 ||
+        recomendados.every(programa => programa.puntos === 0)
+    ) {
+        mensajeResultado.textContent =
+            "No encontramos coincidencias directas. " +
+            "Puedes revisar tus respuestas e intentarlo de nuevo.";
         return;
     }
 
-    if (indiceActual < window.PREGUNTAS.length - 1) {
-        indiceActual++;
-        mostrarPregunta();
-    } else {
-        mostrarResultados();
-    }
-});
+    recomendados.forEach((programa, indice) => {
+        const tarjeta = document.createElement("article");
+        tarjeta.className = "resultado";
+
+        const titulo = document.createElement("h3");
+        titulo.textContent =
+            `${indice + 1}. ${programa.nombre}`;
+
+        const nivel = document.createElement("p");
+        nivel.textContent = `Nivel: ${programa.nivel}`;
+
+        const facultad = document.createElement("p");
+        facultad.textContent = programa.facultad;
+
+        const jornada = document.createElement("p");
+        jornada.textContent = `Jornada: ${programa.jornada}`;
+
+        const puntuacion = document.createElement("p");
+        puntuacion.className = "puntuacion";
+        puntuacion.textContent =
+            `Afinidad preliminar: ${programa.afinidad}%`;
+
+        const descripcion = document.createElement("p");
+        descripcion.textContent = programa.descripcion;
+
+        const coincidencias = document.createElement("p");
+        coincidencias.textContent =
+            "Coincidencias: " +
+            (programa.coincidencias.join(", ") || "Ninguna");
+
+        tarjeta.append(
+            titulo,
+            nivel,
+            facultad,
+            jornada,
+            puntuacion,
+            descripcion,
+            coincidencias
+        );
+
+        listaResultados.appendChild(tarjeta);
+    });
+}
 
 btnReiniciar.addEventListener("click", () => {
     respuestas = {};
     indiceActual = 0;
 
-    resultados.hidden = true;
-    cuestionario.hidden = true;
-    inicio.hidden = false;
+    resultados.classList.add("oculto");
+    test.classList.add("oculto");
+    inicio.classList.remove("oculto");
+
+    barraProgreso.style.width = "0%";
+    porcentaje.textContent = "0%";
 });

@@ -1,73 +1,94 @@
 
-const areas = [
-    { id: "tecnologia", nombre: "Tecnología y programación" },
-    { id: "ciencias", nombre: "Ciencias e investigación" },
-    { id: "salud", nombre: "Salud y bienestar" },
-    { id: "social", nombre: "Sociedad y educación" },
-    { id: "arte", nombre: "Arte, diseño y creatividad" },
-    { id: "negocios", nombre: "Negocios y administración" }
-];
-
-function crearOpciones() {
-    return areas.map(area => ({
-        texto: area.nombre,
-        area: area.id
-    }));
-}
-
-window.PREGUNTAS = [
+const preguntas = [
     {
-        id: 1,
-        dimension: "intereses",
-        texto: "¿Qué actividad te llama más la atención?",
-        opciones: crearOpciones()
+        id: "area",
+        titulo: "¿Cuál es tu área de interés principal?",
+        descripcion: "Elige el campo que más te llama la atención.",
+        opciones: [
+            "Tecnología y computación",
+            "Matemáticas y ciencias exactas",
+            "Ciencias naturales y experimentales",
+            "Ingeniería y tecnología aplicada",
+            "Electricidad, electrónica y automatización",
+            "Industria, manufactura y producción",
+            "Medio ambiente y sostenibilidad",
+            "Agro, territorio y naturaleza",
+            "Administración, negocios y emprendimiento",
+            "Educación y enseñanza",
+            "Comunicación, medios y creatividad",
+            "Turismo, cultura y servicios",
+            "Salud y cuidado",
+            "Artes, música y expresión creativa",
+            "Sociedad, cultura y humanidades",
+            "Deporte, actividad física y recreación",
+            "Idiomas, lenguas y comunicación intercultural"
+        ]
     },
     {
-        id: 2,
-        dimension: "intereses",
-        texto: "¿Qué tema investigarías por curiosidad?",
-        opciones: crearOpciones()
+        id: "fortaleza1",
+        titulo: "¿Cuál de las siguientes opciones consideras una fortaleza o habilidad tuya?",
+        descripcion: "Selecciona la habilidad que mejor te representa.",
+        opciones: [
+            "Razonamiento matemático",
+            "Pensamiento lógico",
+            "Creatividad e imaginación",
+            "Comunicación",
+            "Curiosidad e investigación",
+            "Afinidad con la tecnología",
+            "Liderazgo e iniciativa",
+            "Resolución de problemas",
+            "Habilidad práctica",
+            "Análisis e interpretación de información",
+            "Organización y gestión",
+            "Sensibilidad ambiental",
+            "Trabajo con personas y empatía",
+            "Atención al detalle y precisión",
+            "Sensibilidad y expresión artística",
+            "Pensamiento crítico"
+        ]
     },
     {
-        id: 3,
-        dimension: "intereses",
-        texto: "¿Qué tipo de proyecto disfrutarías realizar?",
-        opciones: crearOpciones()
+        id: "fortaleza2",
+        titulo: "¿Cuál otra de las siguientes opciones consideras una fortaleza o habilidad tuya?",
+        descripcion: "Elige otra habilidad que también tengas.",
+        opciones: [
+            "Razonamiento matemático",
+            "Pensamiento lógico",
+            "Creatividad e imaginación",
+            "Comunicación",
+            "Curiosidad e investigación",
+            "Afinidad con la tecnología",
+            "Liderazgo e iniciativa",
+            "Resolución de problemas",
+            "Habilidad práctica",
+            "Análisis e interpretación de información",
+            "Organización y gestión",
+            "Sensibilidad ambiental",
+            "Trabajo con personas y empatía",
+            "Atención al detalle y precisión",
+            "Sensibilidad y expresión artística",
+            "Pensamiento crítico"
+        ]
     },
     {
-        id: 4,
-        dimension: "habilidades",
-        texto: "¿En qué actividad sientes que podrías destacar?",
-        opciones: crearOpciones()
-    },
-    {
-        id: 5,
-        dimension: "habilidades",
-        texto: "¿Qué problema te gustaría aprender a resolver?",
-        opciones: crearOpciones()
-    },
-    {
-        id: 6,
-        dimension: "habilidades",
-        texto: "¿Qué tarea te gustaría mejorar con la práctica?",
-        opciones: crearOpciones()
-    },
-    {
-        id: 7,
-        dimension: "objetivos",
-        texto: "¿Qué te gustaría conseguir con tu carrera?",
-        opciones: crearOpciones()
-    },
-    {
-        id: 8,
-        dimension: "objetivos",
-        texto: "¿En qué entorno te gustaría trabajar?",
-        opciones: crearOpciones()
-    },
-    {
-        id: 9,
-        dimension: "objetivos",
-        texto: "¿Qué impacto te gustaría generar?",
-        opciones: crearOpciones()
+        id: "objetivo",
+        titulo: "¿Cuál crees que es uno de tus objetivos profesionales?",
+        descripcion: "Piensa en lo que te gustaría hacer en tu vida profesional.",
+        opciones: [
+            "Crear y desarrollar tecnología",
+            "Investigar y generar conocimiento",
+            "Diseñar, construir o mejorar soluciones",
+            "Dirigir empresas, equipos o proyectos",
+            "Crear mi propio negocio o emprender",
+            "Trabajar por el medio ambiente y la sostenibilidad",
+            "Enseñar y formar a otras personas",
+            "Trabajar en industria, producción y procesos",
+            "Contribuir al desarrollo del campo y los territorios",
+            "Trabajar con personas y contribuir a la sociedad",
+            "Desarrollarme en turismo, cultura y servicios",
+            "Analizar información y resolver problemas complejos",
+            "Cuidar la salud y mejorar el bienestar",
+            "Crear, interpretar o desarrollar expresiones artísticas y culturales"
+        ]
     }
 ];
